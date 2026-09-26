@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520" role="img" aria-label="درخت و ردهای کوچک کنار یک گودی زمین">
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#ebe3f8"/><stop offset="1" stop-color="#fcf2e8"/></linearGradient><linearGradient id="soil" x2="0" y2="1"><stop stop-color="#b37f76"/><stop offset="1" stop-color="#684764"/></linearGradient></defs>
+ <rect width="700" height="520" fill="url(#bg)"/><circle cx="560" cy="108" r="78" fill="#fff" opacity=".7"/>
+ <path d="M0 355Q175 300 345 352T700 349V520H0Z" fill="#e0c7c2"/><path d="M0 395Q240 350 490 395T700 389V520H0Z" fill="url(#soil)"/>
+ <path d="M94 349Q168 273 220 280T331 333" fill="none" stroke="#5d4c75" stroke-width="34" stroke-linecap="round"/>
+ <path d="M193 291V110" stroke="#5d4c75" stroke-width="44" stroke-linecap="round"/>
+ <ellipse cx="150" cy="115" rx="87" ry="57" fill="#a9b5a4"/><ellipse cx="235" cy="105" rx="81" ry="54" fill="#8eaaa1"/><ellipse cx="193" cy="72" rx="66" ry="52" fill="#bbc8ab"/>
+ <ellipse cx="450" cy="392" rx="90" ry="29" fill="#624361"/><ellipse cx="450" cy="388" rx="57" ry="16" fill="#3d324b"/>
+ <path d="M373 326l-24-21m-10 45l-20-10m201-13l24-24" stroke="#777c74" stroke-width="8" stroke-linecap="round"/>
+ <path d="M300 390q18-20 35-8m-68 26q10-12 22-6m282-18q14-17 29-5" stroke="#f5e8e1" stroke-width="5" fill="none" stroke-linecap="round"/>
+ <circle cx="526" cy="270" r="16" fill="#eb626d"/><path d="M526 252v-33m-17 46h35" stroke="#eb626d" stroke-width="5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520" role="img" aria-label="مداد قرمز نیمه‌پنهان زیر دفتر نقاشی">
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f0e9fa"/><stop offset="1" stop-color="#fbeee7"/></linearGradient><filter id="s"><feGaussianBlur stdDeviation="12"/></filter></defs>
+ <rect width="700" height="520" fill="url(#bg)"/><ellipse cx="356" cy="410" rx="256" ry="55" fill="#6d5876" opacity=".13" filter="url(#s)"/>
+ <path d="M75 340l434-95 97 123-432 92Z" fill="#8b78a5"/><path d="M75 333l434-95 97 123-432 92Z" fill="#fffdf7" stroke="#ad9db2" stroke-width="4"/>
+ <path d="M108 353l124-28m-115 56 183-42m-170 68 101-24" stroke="#ddd2de" stroke-width="5" stroke-linecap="round"/>
+ <path d="M343 160l152 179-23 19L319 181Z" fill="#dc5261"/><path d="M319 181l24-21-31-22Z" fill="#eed5b8"/><path d="M312 138l9 27 10-9Z" fill="#443949"/>
+ <path d="M472 358l23-19 14 15-24 20Z" fill="#e8dacd"/>
+ <path d="M408 292l55 65" stroke="#f3a6ad" stroke-width="5" stroke-linecap="round"/>
+ <circle cx="197" cy="150" r="48" fill="#d8c9ec"/><path d="M183 143q7-21 25-11 20 12-1 28l-11 8v7m0 15h1" stroke="#65518e" stroke-width="8" fill="none" stroke-linecap="round"/>
+ <circle cx="550" cy="124" r="20" fill="#edd2cb"/><circle cx="584" cy="161" r="11" fill="#c3b2dc"/>
+</svg>
