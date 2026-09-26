@@ -1,0 +1,1 @@
+"""Kidsbook prototype server."""

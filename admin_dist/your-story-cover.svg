@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" role="img" aria-label="سه بزغاله کنار خانه">
+ <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#eee4fa"/><stop offset="1" stop-color="#f8e7d7"/></linearGradient></defs>
+ <rect width="720" height="560" fill="url(#sky)"/><circle cx="568" cy="97" r="46" fill="#fbc469" opacity=".8"/>
+ <path d="M0 427Q167 349 351 433T720 410V560H0Z" fill="#b0cb91"/><path d="M95 202 361 71 631 202v236H95Z" fill="#fffaf1" stroke="#644585" stroke-width="11" stroke-linejoin="round"/>
+ <path d="M65 207 361 58 660 207" fill="none" stroke="#644585" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
+ <rect x="273" y="236" width="173" height="202" rx="85" fill="#7650a1"/><rect x="297" y="256" width="129" height="182" rx="64" fill="#9a76b7"/><circle cx="408" cy="351" r="9" fill="#f5d08d"/>
+ <g fill="#fffaf1" stroke="#644585" stroke-width="7"><ellipse cx="171" cy="403" rx="66" ry="55"/><ellipse cx="361" cy="414" rx="68" ry="55"/><ellipse cx="555" cy="402" rx="65" ry="55"/></g>
+ <g fill="#fffaf1" stroke="#644585" stroke-width="6"><path d="m131 370-25-44q-13-29 13-30l40 34 23-37q24-11 28 17l-10 65Z"/><path d="m322 377-24-45q-10-26 17-29l40 33 31-34q28-4 25 23l-13 54Z"/><path d="m517 369-24-44q-12-26 15-28l39 34 29-34q26-4 26 23l-14 49Z"/></g>
+ <g fill="#644585"><circle cx="151" cy="392" r="5"/><circle cx="185" cy="392" r="5"/><circle cx="342" cy="401" r="5"/><circle cx="378" cy="401" r="5"/><circle cx="535" cy="390" r="5"/><circle cx="569" cy="390" r="5"/></g>
+ <g fill="#e7a9a1"><ellipse cx="168" cy="417" rx="13" ry="8"/><ellipse cx="360" cy="426" rx="13" ry="8"/><ellipse cx="552" cy="416" rx="13" ry="8"/></g>
+ <path d="M109 475q253 53 497-5" stroke="#7d9e6e" stroke-width="9" fill="none" stroke-linecap="round"/>
+</svg>

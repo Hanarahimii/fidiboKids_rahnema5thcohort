@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520" role="img" aria-label="خانهٔ خیالی با سقف گرد و پنجره‌های ستاره‌ای">
+ <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#eee5fa"/><stop offset="1" stop-color="#fdece3"/></linearGradient></defs>
+ <rect width="700" height="520" fill="url(#bg)"/><circle cx="538" cy="106" r="76" fill="#fff" opacity=".7"/>
+ <path d="M0 400Q160 367 340 398T700 386V520H0Z" fill="#c4c9b3"/>
+ <path d="M187 420V227q164-126 326 0v193Z" fill="#fff8ed" stroke="#65557d" stroke-width="10"/>
+ <path d="M167 233q179-174 365 0" fill="none" stroke="#715898" stroke-width="44" stroke-linecap="round"/>
+ <path d="M340 420V331q41-55 82 0v89" fill="#d7bdcd" stroke="#695785" stroke-width="8"/>
+ <path d="M249 280l12 26 28 3-21 19 6 28-25-15-25 15 5-28-21-19 28-3Z" fill="#f1b968" stroke="#8e7294" stroke-width="5"/>
+ <path d="M454 280l12 26 28 3-21 19 6 28-25-15-25 15 5-28-21-19 28-3Z" fill="#efb36c" stroke="#8e7294" stroke-width="5"/>
+ <path d="M518 341q-18 5-42 39t-100 92" fill="none" stroke="#e66977" stroke-width="25" stroke-linecap="round"/>
+ <path d="M575 110l5-15 6 15 15 5-15 6-6 15-5-15-15-6Zm-400 24 4-12 4 12 12 4-12 4-4 12-4-12-12-4Z" fill="#8f75a8"/>
+</svg>
