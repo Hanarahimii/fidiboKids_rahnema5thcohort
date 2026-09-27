@@ -5,7 +5,6 @@ import YourStoryApp from './YourStoryApp.jsx';
 import DiscoveryAdmin from './DiscoveryAdmin.jsx';
 import YourStoryAdmin from './YourStoryAdmin.jsx';
 import ResearchApp from './ResearchApp.jsx';
-import SupportSettings from './SupportSettings.jsx';
 import { FidiboHome, Welcome, QuickEntry, AvatarPicker, ParentDashboard, SupportPage, Icon, Sparks, AVATARS as DESIGN_AVATARS } from './Experience.jsx';
 import { completedActivity } from './activity.js';
 
@@ -59,7 +58,7 @@ function KidHome({ child, onAvatar }) {
   const [data,setData]=useState(null),[error,setError]=useState('');
   const [banners,setBanners]=useState({});
   useEffect(()=>{Promise.all([request('/your-story/stories?language=fa'),request('/discovery/topics?language=fa'),request('/crafts')]).then(([a,b,c])=>setData({stories:a.stories,topics:b.topics,crafts:c.crafts})).catch(e=>setError(e.message));request('/book/banners').then(d=>setBanners(d.home||{})).catch(()=>{});},[]);
-  return <div className="u-kid-home" dir="rtl"><header className="u-kid-hero"><Sparks/><div><p>سلام،</p><h1>دوست قشنگم!</h1><span>امروز چی دوست داری؟</span></div><button className="u-kid-avatar-button" onClick={onAvatar} aria-label="تغییر آواتار"><img className="u-kid-avatar" src={AVATARS[child.avatar]} alt="آواتار من"/></button></header><main className="u-kid-content"><div className="u-lane-grid">{[['stories','story','book','قصه'],['craft','craft','craft','کاردستی'],['discover','discover','search','کشف']].map(([href,cl,icon,title])=><a key={href} className={'u-lane '+cl} href={'/'+href}><Icon name={icon} size={28}/><strong>{title}</strong></a>)}</div>
+  return <div className="u-kid-home" dir="rtl"><header className="u-kid-hero"><Sparks/><div><p>سلام،</p><h1>{child.name==='دوست من'?'دوست عزیز':child.name}!</h1><span>امروز چی دوست داری؟</span></div><button className="u-kid-avatar-button" onClick={onAvatar} aria-label="تغییر آواتار"><img className="u-kid-avatar" src={AVATARS[child.avatar]} alt="آواتار من"/></button></header><main className="u-kid-content"><div className="u-lane-grid">{[['stories','story','book','قصه'],['craft','craft','craft','کاردستی'],['discover','discover','search','کشف']].map(([href,cl,icon,title])=><a key={href} className={'u-lane '+cl} href={'/'+href}><Icon name={icon} size={28}/><strong>{title}</strong></a>)}</div>
   <h2>بریم قصه بخونیم <Icon name="book"/></h2><a className="x-continue" href="/book"><img src={banners.fish||'/api/book/art/cover'} alt=""/><div><strong>ماهی سیاه کوچولو</strong><small>بخوان، گوش بده و ماجرا رو کشف کن</small></div></a>
   <h2>برات انتخاب شده <Icon name="spark"/></h2>{error&&<p className="x-error" role="alert">{error} <button onClick={()=>location.reload()}>تلاش دوباره</button></p>}{!data&&!error&&<p role="status">در حال بارگذاری…</p>}<div className="u-content-grid">{data?.crafts.map(item=><a className="u-content-card" key={item.id} href="/craft"><div className="u-card-picture pink">{banners.craft||asset(item.content.art_key)?<img src={banners.craft||asset(item.content.art_key)} alt=""/>:<Icon name="craft" size={70}/>}</div><strong>{item.content.title}</strong><small>کاردستی · {item.content.duration}</small></a>)}{data?.stories.map(item=><a className="u-content-card" key={item.id} href="/your-story"><div className="u-card-picture"><img src={asset(item.content.nodes?.S1?.art_key)||'/your-story-cover.svg'} alt=""/></div><strong>{item.content.title}</strong><small>قصه · با انتخاب‌های تو</small></a>)}</div><h2>کشف‌های جدید <Icon name="search"/></h2><div className="u-discover-grid">{data?.topics.map(item=><a key={item.id} href={'/discover?topic='+encodeURIComponent(item.id)}><Icon name="search"/><strong>{item.content.title}</strong></a>)}</div><a className="x-child-support" href="/support"><span>برای بزرگ‌ترها · بازخورد و حمایت</span><Icon name="heart" size={19}/></a></main></div>;
 }
@@ -217,7 +216,7 @@ function ParentArea({api}) {
     <main className="u-parent-work"><header><h1>فضای والد</h1><p>پروفایل کودک و روند فعالیت‌ها</p></header><div className="u-embedded"><ParentHome api={api}/></div></main></div>;
 }
 
-const SECTIONS = [['home','صفحهٔ اصلی کودک'],['story','محتوای قصه'],['your-story','قصه‌های «داستان تو»'],['discovery','محتوای کشف'],['craft','محتوای کاردستی'],['support','پیوندهای حمایت'],['audio','داوری صدا']];
+const SECTIONS = [['home','صفحهٔ اصلی کودک'],['story','محتوای قصه'],['your-story','قصه‌های «داستان تو»'],['discovery','محتوای کشف'],['craft','محتوای کاردستی'],['audio','داوری صدا']];
 function ExpertHub({api, Login, BookEditor}) {
   const [auth,setAuth]=useState(null), [tab,setTab]=useState('home');
   const [opened,setOpened]=useState(['home']);
@@ -231,15 +230,13 @@ function ExpertHub({api, Login, BookEditor}) {
       <button className="u-signout" onClick={async()=>{await api('/admin/logout',{method:'POST'});setAuth(false);}}>خروج</button></aside>
       <main className="u-parent-work"><header><h1>{SECTIONS.find(([key])=>key===tab)?.[1]}</h1><p>مدیریت محتوای فیدیبو کیدز</p></header>
         {opened.map(key=><div className="u-embedded" key={key} hidden={tab!==key}>{key==='home'?<HomeSettings api={api}/> : key==='story'?<BookEditor/> : key==='your-story'?<YourStoryAdmin api={api} Login={Login}/>
-          :key==='discovery'?<DiscoveryAdmin api={api} Login={Login}/> :key==='craft'?<CraftAdmin api={api}/> :key==='support'?<SupportSettings api={api}/> : <ResearchApp api={api} Login={Login}/>}</div>)}
+          :key==='discovery'?<DiscoveryAdmin api={api} Login={Login}/> :key==='craft'?<CraftAdmin api={api}/> : <ResearchApp api={api} Login={Login}/>}</div>)}
       </main></div>;
 }
 export default function UnifiedApp({api,Login,BookEditor}) {
  const route=location.pathname.split('/')[1], [edition,setEdition]=useState(null),[error,setError]=useState('');
  useEffect(()=>{request('/edition').then(setEdition).catch(e=>setError(e.message));},[]);
- useEffect(()=>{const titles={child:'خانهٔ کودک',stories:'قصه‌ها',book:'ماهی سیاه کوچولو',craft:'کاردستی',discover:'کشف','your-story':'داستان تو',parent:'داشبورد والدین',expert:'میزکار کارشناس',support:'بازخورد و حمایت',welcome:'ورود به کیدز'};document.title=route?`${titles[route]||'فیدیبو'} | فیدیبو کیدز`:'فیدیبو';
-   const icon=document.querySelector('link[rel="icon"]');if(icon){icon.type='image/png';icon.href=route?'/fidibo-kids-favicon.png':'/fidibo-favicon.png';}
- },[route]);
+ useEffect(()=>{const titles={child:'خانهٔ کودک',stories:'قصه‌ها',book:'ماهی سیاه کوچولو',craft:'کاردستی',discover:'کشف','your-story':'داستان تو',parent:'داشبورد والدین',expert:'میزکار کارشناس',support:'بازخورد و حمایت',welcome:'ورود به کیدز'};document.title=route?`${titles[route]||'فیدیبو'} | فیدیبو کیدز`:'فیدیبو';},[route]);
  if(error)return <main className="x-phone x-center" dir="rtl"><p role="alert">{error}</p><button onClick={()=>location.reload()}>تلاش دوباره</button></main>;
  if(!edition)return <p className="u-loading">در حال آماده‌سازی…</p>;
  if(route==='expert')return <ExpertHub api={api} Login={Login} BookEditor={BookEditor}/>;

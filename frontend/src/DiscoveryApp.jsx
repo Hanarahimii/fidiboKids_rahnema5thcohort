@@ -73,6 +73,7 @@ export default function DiscoveryApp() {
 
   useEffect(() => {
     document.title = 'کشف | فیدیبو کیدز';
+    const icon = document.querySelector('link[rel="icon"]'); if (icon) icon.href = '/discovery-favicon.svg';
   }, []);
   useEffect(() => {
     let active = true;
