@@ -218,6 +218,17 @@ function ParentArea({api}) {
 }
 
 const SECTIONS = [['home','صفحهٔ اصلی کودک'],['story','محتوای قصه'],['your-story','قصه‌های «داستان تو»'],['discovery','محتوای کشف'],['craft','محتوای کاردستی'],['support','پیوندهای حمایت'],['audio','داوری صدا']];
+function FeedbackAdmin({api}) {
+ const [items,setItems]=useState([]),[loading,setLoading]=useState(false),[error,setError]=useState('');
+ async function refresh(){setLoading(true);setError('');try{const data=await api('/admin/test-feedback');setItems(data.items||[]);}catch(e){setError(e.message);}finally{setLoading(false);}}
+ useEffect(()=>{refresh();},[]);
+ return <section className="u-panel" dir="rtl"><div className="u-panel-head"><div><h2>بازخورد کاربران</h2><p>امتیاز و نظرهای ثبت‌شده از صفحهٔ بازخورد و حمایت</p></div><button onClick={refresh} disabled={loading}>{loading?'در حال بارگذاری…':'تازه‌سازی'}</button></div>
+  {error&&<p className="u-error" role="alert">{error}</p>}
+  {!loading&&!items.length&&<p>هنوز بازخوردی ثبت نشده است.</p>}
+  <div className="u-feedback-list">{items.map(item=><article className="u-feedback-item" key={item.source+'-'+item.id+'-'+item.created_at}><div><strong>امتیاز: {fa(item.rating)} از ۵</strong><small>{new Date(item.created_at).toLocaleString('fa-IR')}</small></div><p>{item.comment||'بدون توضیح'}</p></article>)}</div>
+ </section>;
+}
+
 function ExpertHub({api, Login, BookEditor}) {
   const [auth,setAuth]=useState(null), [tab,setTab]=useState('home');
   const [opened,setOpened]=useState(['home']);
@@ -231,7 +242,7 @@ function ExpertHub({api, Login, BookEditor}) {
       <button className="u-signout" onClick={async()=>{await api('/admin/logout',{method:'POST'});setAuth(false);}}>خروج</button></aside>
       <main className="u-parent-work"><header><h1>{SECTIONS.find(([key])=>key===tab)?.[1]}</h1><p>مدیریت محتوای فیدیبو کیدز</p></header>
         {opened.map(key=><div className="u-embedded" key={key} hidden={tab!==key}>{key==='home'?<HomeSettings api={api}/> : key==='story'?<BookEditor/> : key==='your-story'?<YourStoryAdmin api={api} Login={Login}/>
-          :key==='discovery'?<DiscoveryAdmin api={api} Login={Login}/> :key==='craft'?<CraftAdmin api={api}/> :key==='support'?<SupportSettings api={api}/> : <ResearchApp api={api} Login={Login}/>}</div>)}
+          :key==='discovery'?<DiscoveryAdmin api={api} Login={Login}/> :key==='craft'?<CraftAdmin api={api}/> :key==='support'?<><SupportSettings api={api}/><FeedbackAdmin api={api}/></> : <ResearchApp api={api} Login={Login}/>}</div>)}
       </main></div>;
 }
 export default function UnifiedApp({api,Login,BookEditor}) {
