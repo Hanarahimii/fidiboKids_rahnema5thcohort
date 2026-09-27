@@ -523,18 +523,26 @@ def _feedback_table(db):
                'rating INTEGER NOT NULL, comment TEXT NOT NULL, created_at TEXT NOT NULL)')
 
 
+def _public_feedback_table(db):
+    db.execute('CREATE TABLE IF NOT EXISTS public_feedback '
+               '(id TEXT PRIMARY KEY, rating INTEGER NOT NULL, comment TEXT NOT NULL, created_at TEXT NOT NULL)')
+
+
 @router.post('/api/test/feedback')
 def test_feedback(body: FeedbackInput, action: Action, db: DB,
                   kidsbook_child: Annotated[str | None, Cookie()] = None):
-    if MODE != 'child-test':
-        raise HTTPException(404, 'Not found')
-    child_id = _child_id(kidsbook_child)
-    if not child_id or not child_id.startswith('testing-') or not db.execute('SELECT 1 FROM child_profiles WHERE id=?', (child_id,)).fetchone():
-        raise HTTPException(401, 'Child entry required')
     with db:
-        _feedback_table(db)
-        db.execute('INSERT OR REPLACE INTO test_feedback VALUES (?,?,?,?)',
-                   (child_id, body.rating, body.comment.strip(), _now()))
+        if MODE == 'child-test':
+            child_id = _child_id(kidsbook_child)
+            if not child_id or not child_id.startswith('testing-') or not db.execute('SELECT 1 FROM child_profiles WHERE id=?', (child_id,)).fetchone():
+                raise HTTPException(401, 'Child entry required')
+            _feedback_table(db)
+            db.execute('INSERT OR REPLACE INTO test_feedback VALUES (?,?,?,?)',
+                       (child_id, body.rating, body.comment.strip(), _now()))
+        else:
+            _public_feedback_table(db)
+            db.execute('INSERT INTO public_feedback VALUES (?,?,?,?)',
+                       (uuid4().hex, body.rating, body.comment.strip(), _now()))
     return {'ok': True}
 
 
@@ -556,4 +564,7 @@ def forget_test(response: Response, action: Action, db: DB,
 def feedback_export(_: Admin, db: DB):
     with db:
         _feedback_table(db)
-    return {'items': [dict(r) for r in db.execute('SELECT * FROM test_feedback ORDER BY created_at DESC')]}
+        _public_feedback_table(db)
+    test_items = [dict(r) | {'source': 'test'} for r in db.execute('SELECT child_id AS id, rating, comment, created_at FROM test_feedback ORDER BY created_at DESC')]
+    public_items = [dict(r) | {'source': 'public'} for r in db.execute('SELECT id, rating, comment, created_at FROM public_feedback ORDER BY created_at DESC')]
+    return {'items': sorted(test_items + public_items, key=lambda item: item['created_at'], reverse=True)}
