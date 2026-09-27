@@ -966,9 +966,8 @@ def admin_app(path: str):
         raise HTTPException(404, "Not found")
     candidate = (DIST / path).resolve()
     if path and candidate.is_relative_to(DIST.resolve()) and candidate.is_file():
-        headers = {"Cache-Control": "no-store"} if path.startswith("fidibo-") else None
-        return FileResponse(candidate, headers=headers)
+        return FileResponse(candidate)
     index = DIST / "index.html"
     if not index.is_file():
         raise HTTPException(503, "Admin panel build missing")
-    return FileResponse(index, headers={"Cache-Control": "no-store"})
+    return FileResponse(index)

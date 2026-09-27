@@ -9,14 +9,13 @@ import os
 import re
 import secrets
 import time
-from urllib.parse import urlsplit
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Literal
 from uuid import uuid4
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 from .auth import COOKIE_NAME, settings
 from .edition import MODE, DONATION_URL, SECURE_COOKIES
@@ -401,64 +400,6 @@ def delete_craft(craft_id: str, _: Admin, action: Action, db: DB):
 @router.get('/api/edition')
 def edition():
     return {'mode': MODE, 'donation_url': DONATION_URL, 'feedback_enabled': MODE == 'child-test'}
-
-
-class SupportLinksInput(BaseModel):
-    version: int = Field(ge=0)
-    gateway_url: str = Field(default='', max_length=2048)
-    direct_url: str = Field(default='', max_length=2048)
-    card_number: str = Field(default='', max_length=32)
-
-    @field_validator('gateway_url', 'direct_url')
-    @classmethod
-    def payment_link(cls, value: str) -> str:
-        value = value.strip()
-        if not value:
-            return value
-        parsed = urlsplit(value)
-        if parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password or any(ord(char) < 33 for char in value):
-            raise ValueError('Enter a complete HTTPS payment link')
-        return value
-
-    @field_validator('card_number')
-    @classmethod
-    def valid_card(cls, value: str) -> str:
-        number = re.sub(r'[\s-]', '', value).translate(str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '01234567890123456789'))
-        if number and not re.fullmatch(r'\d{16}', number):
-            raise ValueError('Enter a 16-digit card number')
-        return number
-
-
-def _support_links(db: DB) -> dict:
-    with db:
-        db.execute('CREATE TABLE IF NOT EXISTS support_links (id INTEGER PRIMARY KEY CHECK(id=1), gateway_url TEXT NOT NULL, direct_url TEXT NOT NULL, card_number TEXT NOT NULL, version INTEGER NOT NULL)')
-    row = db.execute('SELECT gateway_url,direct_url,card_number,version FROM support_links WHERE id=1').fetchone()
-    return dict(row) if row else {'gateway_url':'', 'direct_url':'', 'card_number':'', 'version':0}
-
-
-@router.get('/api/support-links')
-def public_support_links(response: Response, db: DB):
-    response.headers['Cache-Control'] = 'no-store'
-    data = _support_links(db)
-    return {key:data[key] for key in ('gateway_url','direct_url','card_number')}
-
-
-@router.get('/api/admin/support-links')
-def admin_support_links(_: Admin, db: DB):
-    return _support_links(db)
-
-
-@router.put('/api/admin/support-links')
-def update_support_links(body: SupportLinksInput, _: Admin, action: Action, db: DB):
-    _support_links(db)
-    with db:
-        db.execute('BEGIN IMMEDIATE')
-        current = db.execute('SELECT version FROM support_links WHERE id=1').fetchone()
-        if (current['version'] if current else 0) != body.version:
-            raise HTTPException(409, 'Support links changed in another tab')
-        db.execute('INSERT INTO support_links (id,gateway_url,direct_url,card_number,version) VALUES (1,?,?,?,?) ON CONFLICT(id) DO UPDATE SET gateway_url=excluded.gateway_url,direct_url=excluded.direct_url,card_number=excluded.card_number,version=excluded.version',
-                   (body.gateway_url, body.direct_url, body.card_number, body.version+1))
-    return _support_links(db)
 
 
 def _demo_family(db):
