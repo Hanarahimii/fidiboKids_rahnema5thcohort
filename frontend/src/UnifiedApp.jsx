@@ -217,7 +217,7 @@ function ParentArea({api}) {
     <main className="u-parent-work"><header><h1>فضای والد</h1><p>پروفایل کودک و روند فعالیت‌ها</p></header><div className="u-embedded"><ParentHome api={api}/></div></main></div>;
 }
 
-const SECTIONS = [['home','صفحهٔ اصلی کودک'],['story','محتوای قصه'],['your-story','قصه‌های «داستان تو»'],['discovery','محتوای کشف'],['craft','محتوای کاردستی'],['support','پیوندهای حمایت'],['feedback','بازخورد کاربران'],['audio','داوری صدا']];
+const SECTIONS = [['home','صفحهٔ اصلی کودک'],['story','محتوای قصه'],['your-story','قصه‌های «داستان تو»'],['discovery','محتوای کشف'],['craft','محتوای کاردستی'],['support','پیوندهای حمایت'],['audio','داوری صدا']];
 function FeedbackAdmin({api}) {
  const [items,setItems]=useState([]),[loading,setLoading]=useState(false),[error,setError]=useState('');
  async function refresh(){setLoading(true);setError('');try{const data=await api('/admin/test-feedback');setItems(data.items||[]);}catch(e){setError(e.message);}finally{setLoading(false);}}
@@ -225,7 +225,7 @@ function FeedbackAdmin({api}) {
  return <section className="admin-recording" dir="rtl"><div className="admin-section-heading"><div><h2>بازخورد کاربران</h2><p>امتیاز و نظرهای ثبت‌شده از صفحهٔ بازخورد و حمایت</p></div><button onClick={refresh} disabled={loading}>{loading?'در حال بارگذاری…':'تازه‌سازی'}</button></div>
   {error&&<p className="u-error" role="alert">{error}</p>}
   {!loading&&!items.length&&<p>هنوز بازخوردی ثبت نشده است.</p>}
-  {items.length>0&&<div className="feedback-table-wrap" style={{overflowX:'auto',marginTop:'16px'}}><table className="feedback-table" style={{width:'100%',borderCollapse:'collapse',background:'#fff'}}><thead><tr><th style={{padding:'12px',textAlign:'right',borderBottom:'1px solid #ddd',whiteSpace:'nowrap'}}>امتیاز</th><th style={{padding:'12px',textAlign:'right',borderBottom:'1px solid #ddd'}}>نظر</th><th style={{padding:'12px',textAlign:'right',borderBottom:'1px solid #ddd',whiteSpace:'nowrap'}}>زمان ثبت</th></tr></thead><tbody>{items.map(item=><tr key={item.source+'-'+item.id+'-'+item.created_at}><td style={{padding:'12px',borderBottom:'1px solid #eee',verticalAlign:'top',whiteSpace:'nowrap'}}> <strong>{fa(item.rating)} از ۵</strong></td><td style={{padding:'12px',borderBottom:'1px solid #eee',verticalAlign:'top',minWidth:'240px'}}>{item.comment||'بدون توضیح'}</td><td style={{padding:'12px',borderBottom:'1px solid #eee',verticalAlign:'top',whiteSpace:'nowrap'}}>{new Date(item.created_at).toLocaleString('fa-IR')}</td></tr>)}</tbody></table></div>}
+  <div className="discover-admin-actions">{items.map(item=><article className="admin-recording" key={item.source+'-'+item.id+'-'+item.created_at}><div><strong>امتیاز: {fa(item.rating)} از ۵</strong><small>{new Date(item.created_at).toLocaleString('fa-IR')}</small></div><p>{item.comment||'بدون توضیح'}</p></article>)}</div>
  </section>;
 }
 
@@ -242,7 +242,7 @@ function ExpertHub({api, Login, BookEditor}) {
       <button className="u-signout" onClick={async()=>{await api('/admin/logout',{method:'POST'});setAuth(false);}}>خروج</button></aside>
       <main className="u-parent-work"><header><h1>{SECTIONS.find(([key])=>key===tab)?.[1]}</h1><p>مدیریت محتوای فیدیبو کیدز</p></header>
         {opened.map(key=><div className="u-embedded" key={key} hidden={tab!==key}>{key==='home'?<HomeSettings api={api}/> : key==='story'?<BookEditor/> : key==='your-story'?<YourStoryAdmin api={api} Login={Login}/>
-          :key==='discovery'?<DiscoveryAdmin api={api} Login={Login}/> :key==='craft'?<CraftAdmin api={api}/> :key==='support'?<SupportSettings api={api}/> :key==='feedback'?<FeedbackAdmin api={api}/> : <ResearchApp api={api} Login={Login}/>}</div>)}
+          :key==='discovery'?<DiscoveryAdmin api={api} Login={Login}/> :key==='craft'?<CraftAdmin api={api}/> :key==='support'?<><SupportSettings api={api}/><FeedbackAdmin api={api}/></> : <ResearchApp api={api} Login={Login}/>}</div>)}
       </main></div>;
 }
 export default function UnifiedApp({api,Login,BookEditor}) {
