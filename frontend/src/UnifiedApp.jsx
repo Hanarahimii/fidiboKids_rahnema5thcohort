@@ -225,7 +225,7 @@ function FeedbackAdmin({api}) {
  return <section className="admin-recording" dir="rtl"><div className="admin-section-heading"><div><h2>بازخورد کاربران</h2><p>امتیاز و نظرهای ثبت‌شده از صفحهٔ بازخورد و حمایت</p></div><button onClick={refresh} disabled={loading}>{loading?'در حال بارگذاری…':'تازه‌سازی'}</button></div>
   {error&&<p className="u-error" role="alert">{error}</p>}
   {!loading&&!items.length&&<p>هنوز بازخوردی ثبت نشده است.</p>}
-  <div className="discover-admin-actions">{items.map(item=><article className="admin-recording" key={item.source+'-'+item.id+'-'+item.created_at}><div><strong>امتیاز: {fa(item.rating)} از ۵</strong><small>{new Date(item.created_at).toLocaleString('fa-IR')}</small></div><p>{item.comment||'بدون توضیح'}</p></article>)}</div>
+  {items.length>0&&<div className="feedback-table-wrap"><table className="feedback-table"><thead><tr><th>امتیاز</th><th>نظر</th><th>زمان ثبت</th></tr></thead><tbody>{items.map(item=><tr key={item.source+'-'+item.id+'-'+item.created_at}><td><strong>{fa(item.rating)} از ۵</strong></td><td>{item.comment||'بدون توضیح'}</td><td>{new Date(item.created_at).toLocaleString('fa-IR')}</td></tr>)}</tbody></table></div>}
  </section>;
 }
 
